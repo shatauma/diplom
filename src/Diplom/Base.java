@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class Base {
 
-    public final static int dimension = 6;
+    public final static int dimension = 5;
     public final static int seed = 123;
     public final static int pointsCount = 1000000;
     public final static float epsilon = 1e-4f;

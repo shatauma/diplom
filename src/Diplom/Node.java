@@ -5,6 +5,12 @@
  */
 package Diplom;
 
+import static Diplom.Algorithm1.b0;
+import static Diplom.Algorithm1.b1;
+import static Diplom.Algorithm1.b2;
+import static Diplom.Algorithm1.b3;
+import static Diplom.Algorithm1.b4;
+import static Diplom.Algorithm1.b5;
 import java.util.ArrayList;
 
 /**
@@ -14,8 +20,8 @@ import java.util.ArrayList;
 public class Node {
 
     public ArrayList<PointDim> PointSet = new ArrayList<>();
-    public float[] left = new float[Base.dimension];
-    public float[] right = new float[Base.dimension];
+    public PointDim left = new PointDim();
+    public PointDim right = new PointDim();
     public ArrayList<Node> Pairs = new ArrayList<>();
 
     public Node() {
@@ -25,26 +31,45 @@ public class Node {
         this.PointSet = PointSet;
     }
 
-    public Node(float[] left, float[] right) {
+    public Node(PointDim left, PointDim right) {
         this.left = left;
         this.right = right;
     }
 
-    public void ResetBoundingValues() {
+    public void UpdateBoundingValues() {
         if (!this.IsEmpty()) {
-            for (int i = 0; i < Base.dimension; ++i) {
-                this.left[i] = 1;
-                this.right[i] = 0;
-            }
+            ResetBoundingValues();
+            //if (PointSet.size() < 100) {//this is kostill for faster 0.5 second
             for (PointDim point : PointSet) {
-                for (int i = 0; i < Base.dimension; ++i) {
-                    if (this.left[i] > point.X[i]) {
-                        this.left[i] = point.X[i];
-                    }
-                    if (this.right[i] < point.X[i]) {
-                        this.right[i] = point.X[i];
+                CheckBoundingValues(point);
+            }
+            /*} else {
+                int bla = 0;
+                for (PointDim point : PointSet) {
+                    ++bla;
+                    if (bla == 10) {
+                        bla = 0;
+                        CheckBoundingValues(point);
                     }
                 }
+            }*/
+        }
+    }
+
+    private void ResetBoundingValues() {
+        for (int i = 0; i < Base.dimension; ++i) {
+            this.left.X[i] = 1;
+            this.right.X[i] = 0;
+        }
+    }
+
+    private void CheckBoundingValues(PointDim point) {
+        for (int i = 0; i < Base.dimension; ++i) {
+            if (this.left.X[i] > point.X[i]) {
+                this.left.X[i] = point.X[i];
+            }
+            if (this.right.X[i] < point.X[i]) {
+                this.right.X[i] = point.X[i];
             }
         }
     }
@@ -62,17 +87,21 @@ public class Node {
     }
 
     public Node SplitSelf() {
+        b0 = System.currentTimeMillis();
         Node NewNode = new Node();
-        ArrayList<PointDim> NewPointSet = new ArrayList<>();
+        ArrayList<PointDim> NewPointSet = new ArrayList<>(PointSet.size());
+        NewNode.PointSet = new ArrayList<>(PointSet.size());
         float middle;
         int maxSideIndex = 0;
+        b1 += System.currentTimeMillis() - b0;
         for (int i = 1; i < Base.dimension; ++i) {
-            if (this.right[maxSideIndex] - this.left[maxSideIndex]
-                    < this.right[i] - this.left[i]) {
+            if (this.right.X[maxSideIndex] - this.left.X[maxSideIndex]
+                    < this.right.X[i] - this.left.X[i]) {
                 maxSideIndex = i;
             }
         }
-        middle = (right[maxSideIndex] + left[maxSideIndex]) / 2;
+        middle = (right.X[maxSideIndex] + left.X[maxSideIndex]) / 2;
+        b2 += System.currentTimeMillis() - b0;
         for (PointDim point : PointSet) {
             if (point.X[maxSideIndex] > middle) {
                 NewNode.AddPoint(point);
@@ -80,9 +109,12 @@ public class Node {
                 NewPointSet.add(point);
             }
         }
+        b3 += System.currentTimeMillis() - b0;
         PointSet = NewPointSet;
-        this.ResetBoundingValues();
-        NewNode.ResetBoundingValues();
+        b4 += System.currentTimeMillis() - b0;
+        this.UpdateBoundingValues();
+        NewNode.UpdateBoundingValues();
+        b5 += System.currentTimeMillis() - b0;
         return NewNode;
     }
 
@@ -91,21 +123,5 @@ public class Node {
         this.left = node.left;
         this.right = node.right;
         this.Pairs = node.Pairs;
-    }
-
-    public PointDim GetCenter() {
-        PointDim Center = new PointDim();
-        for (int i = 0; i < Base.dimension; ++i) {
-            Center.X[i] = (left[i] + right[i]) / 2;
-        }
-        return Center;
-    }
-
-    public PointDim GetLeft() {
-        PointDim VeryLeft = new PointDim();
-        for (int i = 0; i < Base.dimension; ++i) {
-            VeryLeft.X[i] = left[i];
-        }
-        return VeryLeft;
     }
 }

@@ -19,27 +19,33 @@ public class Algorithm1 {
     public float delta = 0.0f;
     public float maxDelta = 2.0f;
     public int IterationCount = 0;
-    public long a0 = 0;
-    public long a1 = 0;
-    public long a2 = 0;
-    public long a3 = 0;
-    public long b0 = 0;
-    public long b1 = 0;
-    public long b2 = 0;
-    public long b3 = 0;
+    public static long a0 = 0;
+    public static long a1 = 0;
+    public static long a2 = 0;
+    public static long a3 = 0;
+    public static long b0 = 0;
+    public static long b1 = 0;
+    public static long b2 = 0;
+    public static long b3 = 0;
+    public static long b4 = 0;
+    public static long b5 = 0;
+    public static long c0 = 0;
+    public static long c1 = 0;
+    public static long c2 = 0;
+    public static long c3 = 0;
 
     public Algorithm1(List<PointDim> PointSet) {
         Tree.add(new Node(new ArrayList<>(PointSet)));
-        Tree.get(0).ResetBoundingValues();
+        Tree.get(0).UpdateBoundingValues();
         Tree.get(0).Pairs.add(Tree.get(0));
         int maxSideIndex = 0;
         for (int i = 1; i < Base.dimension; ++i) {
-            if (Tree.get(0).right[maxSideIndex] - Tree.get(0).left[maxSideIndex]
-                    < Tree.get(0).right[i] - Tree.get(0).left[i]) {
+            if (Tree.get(0).right.X[maxSideIndex] - Tree.get(0).left.X[maxSideIndex]
+                    < Tree.get(0).right.X[i] - Tree.get(0).left.X[i]) {
                 maxSideIndex = i;
             }
         }
-        delta = Tree.get(0).right[maxSideIndex] - Tree.get(0).left[maxSideIndex];
+        delta = Tree.get(0).right.X[maxSideIndex] - Tree.get(0).left.X[maxSideIndex];
     }
 
     public void TillEnd() {
@@ -49,6 +55,11 @@ public class Algorithm1 {
         b1 = 0;
         b2 = 0;
         b3 = 0;
+        b4 = 0;
+        b5 = 0;
+        c1 = 0;
+        c2 = 0;
+        c3 = 0;
 
         boolean stop = false;
         while (!stop) {
@@ -63,14 +74,21 @@ public class Algorithm1 {
         System.out.println("a1 --------- " + a1);
         System.out.println("a2 --------- " + (a2 - a1));
         //System.out.println("a3 --------- " + (a3 - a2));
+        System.out.println("c1 --------- " + c1);
+        System.out.println("c2 --------- " + (c2 - c1));
+        //System.out.println("c3 --------- " + (c3 - c2));
         System.out.println("b1 --------- " + b1);
         System.out.println("b2 --------- " + (b2 - b1));
         System.out.println("b3 --------- " + (b3 - b2));
+        System.out.println("b4 --------- " + (b4 - b3));
+        System.out.println("b5 --------- " + (b5 - b4));
     }
 
     public void Iteration() {
         ++IterationCount;
         maxDelta = 0.0f;
+        //System.out.println(Tree.size());
+        //System.out.println(delta);
 
         a0 = System.currentTimeMillis();
         SplitNodes();
@@ -83,9 +101,9 @@ public class Algorithm1 {
         int TreeCount = Tree.size();
         for (int i = 0; i < TreeCount; ++i) {
             if (!Tree.get(i).OnlyOneElement()) {
-                b0 = System.currentTimeMillis();
+                c0 = System.currentTimeMillis();
                 Node newNode = Tree.get(i).SplitSelf();
-                b1 += System.currentTimeMillis() - b0;
+                c1 += System.currentTimeMillis() - c0;
                 if (newNode.IsEmpty()) {// if new Node is empty remove it
                 } else if (Tree.get(i).IsEmpty()) {// if old Node become empty clone new node to old
                     Tree.get(i).Clone(newNode);
@@ -97,7 +115,7 @@ public class Algorithm1 {
                     newNode.Pairs.add(newNode);
                     Tree.add(newNode);
                 }
-                b2 += System.currentTimeMillis() - b0;
+                c2 += System.currentTimeMillis() - c0;
             }
         }
     }
@@ -123,9 +141,9 @@ public class Algorithm1 {
                     float MaxPairDistance = this.MaxDistance(node, pair);
                     if (MaxPairDistance < this.delta) {
                         pairIterator.remove();
-                    } else if (MaxPairDistance > maxDelta) {
+                    }/* else if (MaxPairDistance > maxDelta) {
                         maxDelta = MaxPairDistance;
-                    }
+                    }*/
                 }
             }
         }
@@ -141,13 +159,18 @@ public class Algorithm1 {
     }
 
     private float MaxDistance(Node u, Node v) {
-        PointDim C1 = u.GetCenter();
-        PointDim C2 = v.GetCenter();
-        PointDim Left1 = u.GetLeft();
-        PointDim Left2 = v.GetLeft();
-        float result = Base.Distance(C1, C2) + Base.Distance(Left1, C1)
-                + Base.Distance(Left2, C2);
-        return result;
+        PointDim a = new PointDim();
+        PointDim b = new PointDim();
+        for (int i = 0; i < Base.dimension; ++i) {
+            if (u.right.X[i] < v.left.X[i]) {
+                a.X[i] = u.left.X[i];
+                b.X[i] = v.right.X[i];
+            } else {
+                a.X[i] = u.right.X[i];
+                b.X[i] = v.left.X[i];
+            }
+        }
+        return Base.Distance(a, b);
     }
 
     private float MaxDistance(Pair pair) {
@@ -155,7 +178,8 @@ public class Algorithm1 {
     }
 
     private float MinDistance(Node u, Node v) {
-        return Base.Distance(u.PointSet.get(0), v.PointSet.get(0));
+        return Base.Distance(u.PointSet.get(u.PointSet.size() - 1),
+                v.PointSet.get(v.PointSet.size() - 1));
     }
 
     private float MinDistance(Pair pair) {
