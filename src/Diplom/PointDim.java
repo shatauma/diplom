@@ -5,26 +5,24 @@
  */
 package Diplom;
 
+import java.util.Arrays;
+
 /**
  *
  * @author osboxes
  */
 public class PointDim {
 
-    public float[] X;
+    public float[] X = new float[Base.dimension];
 
     public PointDim(float[] X) {
         this.X = X;
     }
 
     public PointDim(float X) {
-        this.X = new float[Base.dimension];
-        for (int i = 0; i < Base.dimension; ++i) {
-            this.X[i] = X;
-        }
+        Arrays.fill(this.X, X);
     }
 
     public PointDim() {
-        this.X = new float[Base.dimension];
     }
 }

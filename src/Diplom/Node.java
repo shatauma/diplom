@@ -6,8 +6,6 @@
 package Diplom;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 /**
  *
@@ -15,15 +13,15 @@ import java.util.List;
  */
 public class Node {
 
-    public List<PointDim> PointSet = new ArrayList<>();
+    public ArrayList<PointDim> PointSet = new ArrayList<>();
     public float[] left = new float[Base.dimension];
     public float[] right = new float[Base.dimension];
-    public HashSet<Node> Pairs = new HashSet<>();
+    public ArrayList<Node> Pairs = new ArrayList<>();
 
     public Node() {
     }
 
-    public Node(List<PointDim> PointSet) {
+    public Node(ArrayList<PointDim> PointSet) {
         this.PointSet = PointSet;
     }
 
@@ -65,7 +63,7 @@ public class Node {
 
     public Node SplitSelf() {
         Node NewNode = new Node();
-        List<PointDim> NewPointSet = new ArrayList<>();
+        ArrayList<PointDim> NewPointSet = new ArrayList<>();
         float middle;
         int maxSideIndex = 0;
         for (int i = 1; i < Base.dimension; ++i) {

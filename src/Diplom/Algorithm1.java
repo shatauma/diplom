@@ -6,7 +6,6 @@
 package Diplom;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,10 +15,18 @@ import java.util.List;
  */
 public class Algorithm1 {
 
-    public List<Node> Tree = new ArrayList<>();
+    public ArrayList<Node> Tree = new ArrayList<>();
     public float delta = 0.0f;
     public float maxDelta = 2.0f;
     public int IterationCount = 0;
+    public long a0 = 0;
+    public long a1 = 0;
+    public long a2 = 0;
+    public long a3 = 0;
+    public long b0 = 0;
+    public long b1 = 0;
+    public long b2 = 0;
+    public long b3 = 0;
 
     public Algorithm1(List<PointDim> PointSet) {
         Tree.add(new Node(new ArrayList<>(PointSet)));
@@ -36,6 +43,13 @@ public class Algorithm1 {
     }
 
     public void TillEnd() {
+        a1 = 0;
+        a2 = 0;
+        a3 = 0;
+        b1 = 0;
+        b2 = 0;
+        b3 = 0;
+
         boolean stop = false;
         while (!stop) {
             Iteration();
@@ -45,37 +59,45 @@ public class Algorithm1 {
                 stop = true;
             }
         }
+
+        System.out.println("a1 --------- " + a1);
+        System.out.println("a2 --------- " + (a2 - a1));
+        //System.out.println("a3 --------- " + (a3 - a2));
+        System.out.println("b1 --------- " + b1);
+        System.out.println("b2 --------- " + (b2 - b1));
+        System.out.println("b3 --------- " + (b3 - b2));
     }
 
     public void Iteration() {
         ++IterationCount;
         maxDelta = 0.0f;
-        //System.out.println("Tree.Count()=" + Tree.Count());
-        //System.out.println(System.currentTimeMillis() + "- 1-------------------------------");
+
+        a0 = System.currentTimeMillis();
         SplitNodes();
-        //System.out.println(System.currentTimeMillis() + "- 2-------------------------------");
+        a1 += System.currentTimeMillis() - a0;
         RemovePairsNodes();
-        //System.out.println(System.currentTimeMillis() + "- 3-------------------------------");
-        //System.out.println("Tree.Count()=" + Tree.Count());
+        a2 += System.currentTimeMillis() - a0;
     }
 
     private void SplitNodes() {
         int TreeCount = Tree.size();
         for (int i = 0; i < TreeCount; ++i) {
             if (!Tree.get(i).OnlyOneElement()) {
-                Tree.add(Tree.get(i).SplitSelf());
-                if (Tree.get(Tree.size() - 1).IsEmpty()) {// if new Node is empty remove it
-                    Tree.remove(Tree.size() - 1);
+                b0 = System.currentTimeMillis();
+                Node newNode = Tree.get(i).SplitSelf();
+                b1 += System.currentTimeMillis() - b0;
+                if (newNode.IsEmpty()) {// if new Node is empty remove it
                 } else if (Tree.get(i).IsEmpty()) {// if old Node become empty clone new node to old
-                    Tree.get(i).Clone(Tree.get(Tree.size() - 1));
-                    Tree.remove(Tree.size() - 1);
+                    Tree.get(i).Clone(newNode);
                 } else {// copy pairs to new node
-                    Tree.get(Tree.size() - 1).Pairs = new HashSet<>(Tree.get(i).Pairs);
-                    for (Node pair : Tree.get(Tree.size() - 1).Pairs) {
-                        pair.Pairs.add(Tree.get(Tree.size() - 1));
+                    newNode.Pairs = new ArrayList<>(Tree.get(i).Pairs);
+                    for (Node pair : newNode.Pairs) {
+                        pair.Pairs.add(newNode);
                     }
-                    Tree.get(Tree.size() - 1).Pairs.add(Tree.get(Tree.size() - 1));
+                    newNode.Pairs.add(newNode);
+                    Tree.add(newNode);
                 }
+                b2 += System.currentTimeMillis() - b0;
             }
         }
     }

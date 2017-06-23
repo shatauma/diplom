@@ -43,7 +43,7 @@ public class AlgorithmsTest {
         //System.out.println("Started Initialize");
         //System.out.println(System.currentTimeMillis());
         PointSet = new ArrayList<>();
-        Base.CreateEllipse(PointSet);
+        Base.CreateQube(PointSet);
         //System.out.println(System.currentTimeMillis());
         Algorithm1 = new Algorithm1(PointSet);
         Algorithm2 = new Algorithm2(PointSet);
@@ -63,9 +63,9 @@ public class AlgorithmsTest {
         System.out.println("Started Algorythm 1 Till end  " + System.currentTimeMillis());
         time = System.currentTimeMillis();
         Algorithm1.TillEnd();
-        time = System.currentTimeMillis();
+        time = System.currentTimeMillis() - time;
         System.out.println("Time = " + time / 1000.0f);
-        System.out.println("Finished Algorythm 1 Till end " + System.currentTimeMillis() + " { (" + Algorithm1.Tree.get(0).PointSet.get(0).X[0] + ", " + Algorithm1.Tree.get(0).PointSet.get(0).X[1] + "), (" + Algorithm1.Tree.get(0).Pairs.iterator().next().PointSet.get(0).X[0] + ", " + Algorithm1.Tree.get(0).Pairs.iterator().next().PointSet.get(0).X[0] + ") }");
+        System.out.println("Finished Algorythm 1 Till end " + System.currentTimeMillis() + " { (" + Algorithm1.Tree.get(0).PointSet.get(0).X[0] + ", " + Algorithm1.Tree.get(0).PointSet.get(0).X[1] + "), (" + Algorithm1.Tree.get(0).Pairs.iterator().next().PointSet.get(0).X[0] + ", " + Algorithm1.Tree.get(0).Pairs.iterator().next().PointSet.get(0).X[1] + ") }");
         System.out.println("Distance = " + Base.Distance(Algorithm1.Tree.get(0).PointSet.get(0), Algorithm1.Tree.get(0).Pairs.iterator().next().PointSet.get(0)));
     }
 
@@ -79,7 +79,7 @@ public class AlgorithmsTest {
         PointDim[] DN = Algorithm2.Iteration(PointSet, 0.0f);
         time = System.currentTimeMillis() - time;
         System.out.println("Time = " + time / 1000.0f);
-        System.out.println("Finished Algorythm 2 Till end " + System.currentTimeMillis() + " { (" + DN[0].X[0] + ", " + DN[0].X[1] + "), (" + DN[1].X[0] + ", " + DN[1].X[0] + ") }");
+        System.out.println("Finished Algorythm 2 Till end " + System.currentTimeMillis() + " { (" + DN[0].X[0] + ", " + DN[0].X[1] + "), (" + DN[1].X[0] + ", " + DN[1].X[1] + ") }");
         System.out.println("Distance = " + Base.Distance(DN[0], DN[1]));
     }
 
