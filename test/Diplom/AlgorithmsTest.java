@@ -40,16 +40,13 @@ public class AlgorithmsTest {
     @Before
     public void setUp() {
         System.out.println("Initialize Dimensions: " + Base.dimension + " Points count: " + Base.pointsCount);
-
         //System.out.println("Started Initialize");
         //System.out.println(System.currentTimeMillis());
         PointSet = new ArrayList<>();
         Base.CreateEllipse(PointSet);
-
         //System.out.println(System.currentTimeMillis());
         Algorithm1 = new Algorithm1(PointSet);
         Algorithm2 = new Algorithm2(PointSet);
-
         //System.out.println(System.currentTimeMillis());
         //System.out.println("Finished Initialize");
     }
@@ -65,16 +62,7 @@ public class AlgorithmsTest {
     public void testAlgorithm1() {
         System.out.println("Started Algorythm 1 Till end  " + System.currentTimeMillis());
         time = System.currentTimeMillis();
-        boolean stop = false;
-        while (!stop) {
-            Algorithm1.Iteration();
-            if ((Algorithm1.Tree.size() == 2 && Algorithm1.Tree.get(0).PointSet.size() < 2
-                    && Algorithm1.Tree.get(1).PointSet.size() < 2) || (Algorithm1.Tree.size() == 1
-                    && Algorithm1.Tree.get(0).PointSet.size() < 3) || (Algorithm1.Tree.size() == 0)) {
-                stop = true;
-            }
-            //Debug.WriteLine("Algorythm 1 : " + Algorithm1.IterationCount + " : distance=" + Algorithm1.delta + " delta=" + Math.Abs(Algorithm1.maxDelta - Algorithm1.delta) + " Nodes=" + Algorithm1.Tree.Count());
-        }
+        Algorithm1.TillEnd();
         time = System.currentTimeMillis();
         System.out.println("Time = " + time / 1000.0f);
         System.out.println("Finished Algorythm 1 Till end " + System.currentTimeMillis() + " { (" + Algorithm1.Tree.get(0).PointSet.get(0).X[0] + ", " + Algorithm1.Tree.get(0).PointSet.get(0).X[1] + "), (" + Algorithm1.Tree.get(0).Pairs.iterator().next().PointSet.get(0).X[0] + ", " + Algorithm1.Tree.get(0).Pairs.iterator().next().PointSet.get(0).X[0] + ") }");

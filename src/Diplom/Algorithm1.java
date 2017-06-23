@@ -35,6 +35,18 @@ public class Algorithm1 {
         delta = Tree.get(0).right[maxSideIndex] - Tree.get(0).left[maxSideIndex];
     }
 
+    public void TillEnd() {
+        boolean stop = false;
+        while (!stop) {
+            Iteration();
+            if ((Tree.size() == 2 && Tree.get(0).PointSet.size() < 2
+                    && Tree.get(1).PointSet.size() < 2) || (Tree.size() == 1
+                    && Tree.get(0).PointSet.size() < 3) || (Tree.size() == 0)) {
+                stop = true;
+            }
+        }
+    }
+
     public void Iteration() {
         ++IterationCount;
         maxDelta = 0.0f;
