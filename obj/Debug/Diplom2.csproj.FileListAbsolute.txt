@@ -1,6 +1,0 @@
-d:\мои документы\visual studio 2013\Projects\WindowsFormsApplication20\WindowsFormsApplication20\bin\Debug\WindowsFormsApplication20.exe.config
-d:\мои документы\visual studio 2013\Projects\WindowsFormsApplication20\WindowsFormsApplication20\obj\Debug\WindowsFormsApplication20.exe
-d:\мои документы\visual studio 2013\Projects\WindowsFormsApplication20\WindowsFormsApplication20\obj\Debug\WindowsFormsApplication20.pdb
-D:\Мои документы\Visual Studio 2013\Projects\Diplom1\WindowsFormsApplication20\bin\Debug\WindowsFormsApplication20.exe.config
-D:\Мои документы\Visual Studio 2013\Projects\Diplom1\WindowsFormsApplication20\obj\Debug\WindowsFormsApplication20.exe
-D:\Мои документы\Visual Studio 2013\Projects\Diplom1\WindowsFormsApplication20\obj\Debug\WindowsFormsApplication20.pdb
