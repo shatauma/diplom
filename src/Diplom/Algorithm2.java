@@ -17,6 +17,8 @@ public class Algorithm2 {
     public PointDim m;
     public float delta;
     public boolean stop;
+//    public static long a0 = 0;
+//    public static long a1 = 0;
 
     public Algorithm2(List<PointDim> PointSet) {
         DN = new PointDim[2];
@@ -68,6 +70,9 @@ public class Algorithm2 {
     }
 
     private PointDim FPscan(PointDim p, List<PointDim> PointSet) {
+//        System.out.println("FPscan");
+//        a1 = 0;
+//        a0 = System.currentTimeMillis();
         int q = 0;
         float delta = -1;
         for (int i = 0; i < PointSet.size(); ++i) {
@@ -77,6 +82,8 @@ public class Algorithm2 {
                 q = i;
             }
         }
+//        a1 += System.currentTimeMillis() - a0;
+//        System.out.println("a1 --------- " + a1);
         return PointSet.get(q);
     }
 }

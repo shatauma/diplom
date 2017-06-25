@@ -5,12 +5,6 @@
  */
 package Diplom;
 
-import static Diplom.Algorithm1.b0;
-import static Diplom.Algorithm1.b1;
-import static Diplom.Algorithm1.b2;
-import static Diplom.Algorithm1.b3;
-import static Diplom.Algorithm1.b4;
-import static Diplom.Algorithm1.b5;
 import java.util.ArrayList;
 
 /**
@@ -39,20 +33,29 @@ public class Node {
     public void UpdateBoundingValues() {
         if (!this.IsEmpty()) {
             ResetBoundingValues();
-            //if (PointSet.size() < 100) {//this is kostill for faster 0.5 second
-            for (PointDim point : PointSet) {
-                CheckBoundingValues(point);
-            }
-            /*} else {
-                int bla = 0;
+            if (PointSet.size() < 100) {//this is kostill for faster 0.5 second
                 for (PointDim point : PointSet) {
-                    ++bla;
-                    if (bla == 10) {
-                        bla = 0;
-                        CheckBoundingValues(point);
-                    }
+                    CheckBoundingValues(point);
                 }
-            }*/
+            } else {
+                int blaStep;
+                if (PointSet.size() > 1000) {
+                    if (PointSet.size() > 10000) {
+                        if (PointSet.size() > 100000) {
+                            blaStep = 10000;
+                        } else {
+                            blaStep = 1000;
+                        }
+                    } else {
+                        blaStep = 100;
+                    }
+                } else {
+                    blaStep = 10;
+                }
+                for (int bla = 0; bla < PointSet.size(); bla += blaStep) {
+                    CheckBoundingValues(PointSet.get(bla));
+                }
+            }
         }
     }
 
@@ -82,39 +85,33 @@ public class Node {
         return PointSet.isEmpty();
     }
 
-    public void AddPoint(PointDim point) {
-        PointSet.add(point);
-    }
-
     public Node SplitSelf() {
-        b0 = System.currentTimeMillis();
+//        d0 = System.currentTimeMillis();
         Node NewNode = new Node();
-        ArrayList<PointDim> NewPointSet = new ArrayList<>(PointSet.size());
-        NewNode.PointSet = new ArrayList<>(PointSet.size());
+        ArrayList<PointDim> NewPointSet = new ArrayList<>(PointSet.size() >> 1);
+        NewNode.PointSet = new ArrayList<>(PointSet.size() >> 1);
         float middle;
         int maxSideIndex = 0;
-        b1 += System.currentTimeMillis() - b0;
         for (int i = 1; i < Base.dimension; ++i) {
             if (this.right.X[maxSideIndex] - this.left.X[maxSideIndex]
                     < this.right.X[i] - this.left.X[i]) {
                 maxSideIndex = i;
             }
         }
-        middle = (right.X[maxSideIndex] + left.X[maxSideIndex]) / 2;
-        b2 += System.currentTimeMillis() - b0;
+        middle = (right.X[maxSideIndex] + left.X[maxSideIndex]) / 2f;
+//        d1 += System.currentTimeMillis() - d0;
         for (PointDim point : PointSet) {
             if (point.X[maxSideIndex] > middle) {
-                NewNode.AddPoint(point);
+                NewNode.PointSet.add(point);
             } else {
                 NewPointSet.add(point);
             }
         }
-        b3 += System.currentTimeMillis() - b0;
         PointSet = NewPointSet;
-        b4 += System.currentTimeMillis() - b0;
+//        d2 += System.currentTimeMillis() - d0;
         this.UpdateBoundingValues();
         NewNode.UpdateBoundingValues();
-        b5 += System.currentTimeMillis() - b0;
+//        d3 += System.currentTimeMillis() - d0;
         return NewNode;
     }
 
